@@ -14,13 +14,17 @@ class App(Frame):
         super().__init__()
 
         self.columns = 2
-        self.rows = 8
+        self.rows = 7
         self.itemsArr=[]
         self.itemsMap={}
         self.isMouseDragging=False
         self.firstSelection=""
         self.firstX=0
         self.firstY=0
+        self.minX=0
+        self.maxX=0
+        self.minY=0
+        self.maxY=0
         self.lastSelection=""
         self.initUI()
 
@@ -67,18 +71,36 @@ class App(Frame):
         screenY=1440
         newPosX=math.floor(self.minX*(screenW/self.rows))
         newPosY=math.floor(self.minY*(screenY/self.columns))
+        newSizeX=math.floor(((self.maxX+1)-(self.minX))*(screenW/self.rows))
+        newSizeY=math.floor(((self.maxY+1)-(self.minY))*(screenY/self.columns))
         # self.firstX
         
-        pid = os.popen("xdotool search --onlyvisible --name 'Window_Position'").read()
+        self.tk.withdraw() 
+        self.tk.update()
+        
+        time.sleep(0.1)
+        
+        
+        # pid = os.popen("xdotool search --onlyvisible --name 'Window_Position'").read()
+        pid = os.popen("xdotool getactivewindow").read()
         pid = str(pid).strip()
         print(pid)
         # time.sleep(1)
-        cmd_size="xdotool windowsize "+pid+" 800 600"
+        cmd_size=f"xdotool windowsize {pid} {newSizeX} {newSizeY}"
         cmd_position=f"xdotool windowmove {pid} {newPosX} {newPosY}"
         # print(size)
         # print(position)
         os.popen(cmd_size).read()
         os.popen(cmd_position).read()
+        
+        # time.sleep(1)
+
+        time.sleep(0.1)
+        self.tk.update()
+        self.tk.deiconify() 
+
+    def setTk(self, payload):
+        self.tk = payload
 
     def mouseover(self, event, element):
         self.info.configure(text=element)
@@ -99,12 +121,14 @@ class App(Frame):
         self.info.configure(text="up")
         for i in self.itemsMap:
             self.itemsMap[i].configure(background='#fff')
-        self.isMouseDragging=False
-        self.minX=self.itemsMap[element].row_attr
-        self.maxX=self.itemsMap[element].row_attr
-        self.minY=self.itemsMap[element].col_attr
-        self.maxY=self.itemsMap[element].col_attr
+        if self.isMouseDragging==False:    
+            self.minX=self.itemsMap[element].row_attr
+            self.maxX=self.itemsMap[element].row_attr
+            self.minY=self.itemsMap[element].col_attr
+            self.maxY=self.itemsMap[element].col_attr
         self.moveWindow()
+            
+        self.isMouseDragging=False
 
     def mousedrag(self, event, element):
         txt="drag: x:" + str(event.x )+ ", y: " + str(event.y)
@@ -124,8 +148,6 @@ class App(Frame):
             col_offset = 0
         txt="drag: x:" + str(event.x )+ ", y: " + str(event.y) + ",row_offset:" + str(row_offset) + " ,col_offset:" + str(col_offset)
         self.info.configure(text= txt)
-
-           
         for i in self.itemsMap:
             self.itemsMap[i].configure(background='#fff')
         for i in self.itemsMap:
@@ -147,6 +169,7 @@ def main():
     root = Tk()
     # root.geometry("+300+300")
     app = App()
+    app.setTk(root)
     root.mainloop()
 
 
