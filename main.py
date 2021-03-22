@@ -73,12 +73,15 @@ class App(Frame):
         newPosY=math.floor(self.minY*(screenY/self.columns))
         newSizeX=math.floor(((self.maxX+1)-(self.minX))*(screenW/self.rows))
         newSizeY=math.floor(((self.maxY+1)-(self.minY))*(screenY/self.columns))
+        # print('newSizeX', newSizeX)
+        # print('newSizeY', newSizeY)
         # self.firstX
         
+        time.sleep(0.2)
         self.tk.withdraw() 
         self.tk.update()
         
-        time.sleep(0.1)
+        time.sleep(0.2)
         
         
         # pid = os.popen("xdotool search --onlyvisible --name 'Window_Position'").read()
@@ -91,6 +94,7 @@ class App(Frame):
         # print(size)
         # print(position)
         os.popen(cmd_size).read()
+        time.sleep(0.1)
         os.popen(cmd_position).read()
         
         # time.sleep(1)
