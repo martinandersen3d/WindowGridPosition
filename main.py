@@ -39,7 +39,7 @@ class App(Frame):
         for y in range(0, 100):
             self.columnconfigure(y, pad=5)
 
-        info = Label(self, text="Cls")
+        info = Label(self, text="")
         info.grid(row=0, column=0, columnspan=5)
         self.info = info
 
@@ -136,7 +136,7 @@ class App(Frame):
 
     def mousedrag(self, event, element):
         txt="drag: x:" + str(event.x )+ ", y: " + str(event.y)
-        self.info.configure(text= txt)
+        # self.info.configure(text= txt)
         self.isMouseDragging=True
         self.itemsMap[element].configure(background='#d0e3fc')
         row=self.itemsMap[element].row_attr
@@ -151,7 +151,7 @@ class App(Frame):
         if col_offset < 0:
             col_offset = 0
         txt="drag: x:" + str(event.x )+ ", y: " + str(event.y) + ",row_offset:" + str(row_offset) + " ,col_offset:" + str(col_offset)
-        self.info.configure(text= txt)
+        # self.info.configure(text= txt)
         for i in self.itemsMap:
             self.itemsMap[i].configure(background='#fff')
         for i in self.itemsMap:
