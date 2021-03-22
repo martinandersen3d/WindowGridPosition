@@ -62,6 +62,24 @@ class App(Frame):
 
         self.pack()
 
+    def moveWindow(self):
+        screenW=5120
+        screenY=1440
+        newPosX=math.floor(self.minX*(screenW/self.rows))
+        newPosY=math.floor(self.minY*(screenY/self.columns))
+        # self.firstX
+        
+        pid = os.popen("xdotool search --onlyvisible --name 'Window_Position'").read()
+        pid = str(pid).strip()
+        print(pid)
+        # time.sleep(1)
+        cmd_size="xdotool windowsize "+pid+" 800 600"
+        cmd_position=f"xdotool windowmove {pid} {newPosX} {newPosY}"
+        # print(size)
+        # print(position)
+        os.popen(cmd_size).read()
+        os.popen(cmd_position).read()
+
     def mouseover(self, event, element):
         self.info.configure(text=element)
         self.itemsMap[element].configure(background='#d0e3fc')
@@ -82,23 +100,11 @@ class App(Frame):
         for i in self.itemsMap:
             self.itemsMap[i].configure(background='#fff')
         self.isMouseDragging=False
-        
-        screenW=5120
-        screenY=1440
-        newPosX=math.floor(self.firstX*(screenW/self.rows))
-        newPosY=math.floor(self.firstY*(screenY/self.columns))
-        # self.firstX
-        
-        pid = os.popen("xdotool search --onlyvisible --name 'Window_Position'").read()
-        pid = str(pid).strip()
-        print(pid)
-        # time.sleep(1)
-        cmd_size="xdotool windowsize "+pid+" 800 600"
-        cmd_position=f"xdotool windowmove {pid} {newPosX} {newPosY}"
-        # print(size)
-        # print(position)
-        os.popen(cmd_size).read()
-        os.popen(cmd_position).read()
+        self.minX=self.itemsMap[element].row_attr
+        self.maxX=self.itemsMap[element].row_attr
+        self.minY=self.itemsMap[element].col_attr
+        self.maxY=self.itemsMap[element].col_attr
+        self.moveWindow()
 
     def mousedrag(self, event, element):
         txt="drag: x:" + str(event.x )+ ", y: " + str(event.y)
@@ -128,6 +134,10 @@ class App(Frame):
             maxX=max(row, row_offset)
             minY=min(col, col_offset)
             maxY=max(col, col_offset)
+            self.minX=minX
+            self.maxX=maxX
+            self.minY=minY
+            self.maxY=maxY
             if item.row_attr >= minX and item.row_attr <= maxX and item.col_attr >= minY and item.col_attr <= maxY:
                 item.configure(background='#d0e3fc')
                
