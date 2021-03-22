@@ -28,49 +28,42 @@ class App(Frame):
         self.columnconfigure(1, pad=3)
         self.columnconfigure(2, pad=3)
         self.columnconfigure(3, pad=3)
+        self.columnconfigure(4, pad=3)
+        self.columnconfigure(5, pad=3)
+        self.columnconfigure(6, pad=3)
+        self.columnconfigure(7, pad=3)
+        self.columnconfigure(8, pad=3)
+        self.columnconfigure(9, pad=3)
+        self.columnconfigure(10, pad=3)
 
         self.rowconfigure(0, pad=3)
         self.rowconfigure(1, pad=3)
         self.rowconfigure(2, pad=3)
         self.rowconfigure(3, pad=3)
         self.rowconfigure(4, pad=3)
-        entry = Entry(self)
-        entry.grid(row=0, columnspan=4)
-        cls = Button(self, text="Cls")
+        self.rowconfigure(5, pad=3)
+        self.rowconfigure(6, pad=3)
+        self.rowconfigure(7, pad=3)
+        self.rowconfigure(8, pad=3)
+        self.rowconfigure(9, pad=3)
+        self.rowconfigure(10, pad=3)
+        # entry = Entry(self)
+        # entry.grid(row=0, columnspan=4)
+        cls = Label(self, text="Cls")
         cls.grid(row=1, column=0)
-        bck = Button(self, text="Back")
-        bck.grid(row=1, column=1)
-        lbl = Button(self)
-        lbl.grid(row=1, column=2)
-        clo = Button(self, text="Close")
-        clo.grid(row=1, column=3)
+        # bck = Button(self, text="Back")
+        # bck.grid(row=1, column=1)
+        # lbl = Button(self)
+        # lbl.grid(row=1, column=2)
+        # clo = Button(self, text="Close")
+        # clo.grid(row=1, column=3)
         # frame.pack()
 
-        # for x in range(0, self.rows):
-        #     for y in range(0, self.columns):
-        #         lbl = Label(self, bg='SlateGray3', width=10, height=5, 
-        #             cursor='tcross')
-        #         lbl.grid(row=x, column=y)
-        #         lbl.pack(side=LEFT, padx=3)
-        #         # lbl.pack(row=x, column=y)
-        #         self.items.append(lbl)
-                
-        
-        # lbl1 = Label(frame, bg='SlateGray3', width=15, height=10,
-        #     cursor='tcross')
-        # lbl1.pack(side=LEFT, padx=3)
-
-        # lbl2 = Label(frame, bg='SlateGray4', width=15, height=10,
-        #     cursor='hand2')
-        # lbl2.pack(side=LEFT)
-
-        # lbl3 = Label(frame, bg='DarkSeaGreen3', width=15, height=10,
-        #     cursor='heart')
-        # lbl3.pack(side=LEFT, padx=3)
-
-        # lbl4 = Label(frame, bg='DarkSeaGreen4', width=15, height=10,
-        #     cursor='pencil')
-        # lbl4.pack(side=LEFT)
+        for x in range(0, self.rows):
+            for y in range(0, self.columns):
+                lbl = Label(self, bg='SlateGray3', width=10, height=5, 
+                    cursor='tcross')
+                lbl.grid(row=y, column=x)
 
         self.pack()
 
