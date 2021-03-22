@@ -3,6 +3,7 @@
 
 from tkinter import Tk, Frame, Label, Entry, Button, PhotoImage
 from tkinter import BOTH, LEFT
+import math
 
 class App(Frame):
 
@@ -13,6 +14,9 @@ class App(Frame):
         self.rows = 8
         self.itemsArr=[]
         self.itemsMap={}
+        self.isMouseDragging=False
+        self.firstSelection=""
+        self.lastSelection=""
         self.initUI()
 
 
@@ -21,44 +25,26 @@ class App(Frame):
         self.master.title("Cursors")
         self.pack(fill=BOTH)
 
-        # frame = Frame(self, borderwidth=10)
-        # frame.grid_rowconfigure(0, weight = 1) # rows will split space
-        # frame.grid_rowconfigure(1, weight = 1) # rows will split space
-        
-        self.columnconfigure(0, pad=3)
-        self.columnconfigure(1, pad=3)
-        self.columnconfigure(2, pad=3)
-        self.columnconfigure(3, pad=3)
-        self.columnconfigure(4, pad=3)
-        self.columnconfigure(5, pad=3)
-        self.columnconfigure(6, pad=3)
-        self.columnconfigure(7, pad=3)
-        self.columnconfigure(8, pad=3)
-        self.columnconfigure(9, pad=3)
-        self.columnconfigure(10, pad=3)
+        for x in range(0, 100):
+            self.rowconfigure(x, pad=5)
+        for y in range(0, 100):
+            self.columnconfigure(y, pad=5)
 
-        self.rowconfigure(0, pad=3)
-        self.rowconfigure(1, pad=3)
-        self.rowconfigure(2, pad=3)
-        self.rowconfigure(3, pad=3)
-        self.rowconfigure(4, pad=3)
-        self.rowconfigure(5, pad=3)
-        self.rowconfigure(6, pad=3)
-        self.rowconfigure(7, pad=3)
-        self.rowconfigure(8, pad=3)
-        self.rowconfigure(9, pad=3)
-        self.rowconfigure(10, pad=3)
-        data = Label(self, text="Cls")
-        data.grid(row=0, column=0, columnspan=5)
-        self.data = data
+        info = Label(self, text="Cls")
+        info.grid(row=0, column=0, columnspan=5)
+        self.info = info
 
         for x in range(0, self.rows):
             for y in range(0, self.columns):
                 # img = PhotoImage(width=1, height=1)
-                lbl = Frame(self, bg='#fff', width=100, height=100, 
+                lbl = Frame(self, bg='#fff', width=95, height=95, 
                     cursor='hand2')
                 lblId= 'x' + str(x) + 'y' + str(y)
                 lbl.pos_attr= 'x' + str(x) + 'y' + str(y)
+                lbl.row_attr=x
+                lbl.col_attr=y
+                lbl.posX=x*100
+                lbl.posY=y*100
                 # lbl.config(text = 'x:' + str(x) + ', y: ' + str(y)) 
                 self.itemsMap[lblId] = lbl
                 lbl.bind("<Enter>", func=lambda event, t=lblId: self.mouseover(event, t))
@@ -72,24 +58,55 @@ class App(Frame):
         self.pack()
 
     def mouseover(self, event, element):
-        self.data.configure(text=element)
+        self.info.configure(text=element)
         self.itemsMap[element].configure(background='#d0e3fc')
 
     def mouseout(self, enter, element):
-        self.data.configure(text="")
+        self.info.configure(text="")
         self.itemsMap[element].configure(background='#fff')
 
     def mousedown(self, enter, element):
-        self.data.configure(text="down")
+        self.info.configure(text="down")
+        self.firstSelection=element
+        
 
     def mouseup(self, enter, element):
-        self.data.configure(text="up")
+        self.info.configure(text="up")
         for i in self.itemsMap:
             self.itemsMap[i].configure(background='#fff')
+        self.isMouseDragging=False
 
     def mousedrag(self, event, element):
         txt="drag: x:" + str(event.x )+ ", y: " + str(event.y)
-        self.data.configure(text= txt)
+        self.info.configure(text= txt)
+        self.isMouseDragging=True
+        self.itemsMap[element].configure(background='#d0e3fc')
+        row=self.itemsMap[element].row_attr
+        col=self.itemsMap[element].col_attr
+        posX=self.itemsMap[element].posX
+        posY=self.itemsMap[element].posY
+        row_offset=math.floor((posX+event.x)/100)
+        col_offset=math.floor((posY+event.y)/100)
+        if row_offset < 0:
+            row_offset = 0
+           
+        if col_offset < 0:
+            col_offset = 0
+        txt="drag: x:" + str(event.x )+ ", y: " + str(event.y) + ",row_offset:" + str(row_offset) + " ,col_offset:" + str(col_offset)
+        self.info.configure(text= txt)
+
+           
+        for i in self.itemsMap:
+            self.itemsMap[i].configure(background='#fff')
+        for i in self.itemsMap:
+            item = self.itemsMap[i]
+            minX=min(row, row_offset)
+            maxX=max(row, row_offset)
+            minY=min(col, col_offset)
+            maxY=max(col, col_offset)
+            if item.row_attr >= minX and item.row_attr <= maxX and item.col_attr >= minY and item.col_attr <= maxY:
+                item.configure(background='#d0e3fc')
+               
 
 def main():
 
