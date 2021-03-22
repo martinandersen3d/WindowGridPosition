@@ -33,7 +33,6 @@ class App(Frame):
 
         self.master.title("Window_Position")
         self.pack(fill=BOTH)
-
         for x in range(0, 100):
             self.rowconfigure(x, pad=5)
         for y in range(0, 100):
@@ -105,6 +104,7 @@ class App(Frame):
 
     def setTk(self, payload):
         self.tk = payload
+        self.tk.wm_attributes("-topmost", "true")
 
     def mouseover(self, event, element):
         self.info.configure(text=element)
