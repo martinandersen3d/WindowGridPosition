@@ -11,7 +11,8 @@ class App(Frame):
 
         self.columns = 2
         self.rows = 8
-        self.items=[]
+        self.itemsArr=[]
+        self.itemsMap={}
         self.initUI()
 
 
@@ -49,8 +50,9 @@ class App(Frame):
         self.rowconfigure(10, pad=3)
         # entry = Entry(self)
         # entry.grid(row=0, columnspan=4)
-        cls = Label(self, text="Cls")
-        cls.grid(row=1, column=0)
+        data = Label(self, text="Cls")
+        data.grid(row=3, column=3)
+        self.data = data
         # bck = Button(self, text="Back")
         # bck.grid(row=1, column=1)
         # lbl = Button(self)
@@ -62,10 +64,38 @@ class App(Frame):
         for x in range(0, self.rows):
             for y in range(0, self.columns):
                 lbl = Label(self, bg='SlateGray3', width=10, height=5, 
-                    cursor='tcross')
+                    cursor='hand2')
+                lblId= 'x' + str(x) + 'y' + str(y)
+                lbl.pos_attr= 'x' + str(x) + 'y' + str(y)
+                lbl.config(text = 'x:' + str(x) + ', y: ' + str(y)) 
+                self.itemsMap[lblId] = lbl
+                lbl.bind("<Enter>", func=lambda event, t=lblId: self.mouseover(event, t))
+                lbl.bind("<Leave>", func=lambda event, t=lblId: self.mouseout(event, t))
+                lbl.bind("<ButtonRelease-1>", func=lambda event, t=lblId: self.mouseup(event, t))
+                lbl.bind("<Button-1>", func=lambda event, t=lblId: self.mousedown(event, t))
+                lbl.bind("<B1-Motion>", func=lambda event, t=lblId: self.mousedrag(event, t))
                 lbl.grid(row=y, column=x)
 
+
         self.pack()
+
+    def mouseover(self, event, element):
+        self.data.configure(text=element)
+        self.itemsMap[element].configure(background='#d0e3fc')
+
+    def mouseout(self, enter, element):
+        self.data.configure(text="")
+        self.itemsMap[element].configure(background='SlateGray3')
+
+    def mousedown(self, enter, element):
+        self.data.configure(text="down")
+
+    def mouseup(self, enter, element):
+        self.data.configure(text="up")
+
+    def mousedrag(self, event, element):
+        txt="drag: x:" + str(event.x )+ ", y: " + str(event.y)
+        self.data.configure(text= txt)
 
 def main():
 
