@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # sudo apt-get install python3-tk
 
-from tkinter import Tk, Frame, Label, Entry, Button
+from tkinter import Tk, Frame, Label, Entry, Button, PhotoImage
 from tkinter import BOTH, LEFT
 
 class App(Frame):
@@ -48,33 +48,25 @@ class App(Frame):
         self.rowconfigure(8, pad=3)
         self.rowconfigure(9, pad=3)
         self.rowconfigure(10, pad=3)
-        # entry = Entry(self)
-        # entry.grid(row=0, columnspan=4)
         data = Label(self, text="Cls")
-        data.grid(row=3, column=3)
+        data.grid(row=0, column=0, columnspan=5)
         self.data = data
-        # bck = Button(self, text="Back")
-        # bck.grid(row=1, column=1)
-        # lbl = Button(self)
-        # lbl.grid(row=1, column=2)
-        # clo = Button(self, text="Close")
-        # clo.grid(row=1, column=3)
-        # frame.pack()
 
         for x in range(0, self.rows):
             for y in range(0, self.columns):
-                lbl = Label(self, bg='#fff', width=10, height=5, 
+                # img = PhotoImage(width=1, height=1)
+                lbl = Frame(self, bg='#fff', width=100, height=100, 
                     cursor='hand2')
                 lblId= 'x' + str(x) + 'y' + str(y)
                 lbl.pos_attr= 'x' + str(x) + 'y' + str(y)
-                lbl.config(text = 'x:' + str(x) + ', y: ' + str(y)) 
+                # lbl.config(text = 'x:' + str(x) + ', y: ' + str(y)) 
                 self.itemsMap[lblId] = lbl
                 lbl.bind("<Enter>", func=lambda event, t=lblId: self.mouseover(event, t))
                 lbl.bind("<Leave>", func=lambda event, t=lblId: self.mouseout(event, t))
                 lbl.bind("<ButtonRelease-1>", func=lambda event, t=lblId: self.mouseup(event, t))
                 lbl.bind("<Button-1>", func=lambda event, t=lblId: self.mousedown(event, t))
                 lbl.bind("<B1-Motion>", func=lambda event, t=lblId: self.mousedrag(event, t))
-                lbl.grid(row=y, column=x)
+                lbl.grid(row=y+1, column=x)
 
 
         self.pack()
@@ -93,7 +85,6 @@ class App(Frame):
     def mouseup(self, enter, element):
         self.data.configure(text="up")
         for i in self.itemsMap:
-            print(i)
             self.itemsMap[i].configure(background='#fff')
 
     def mousedrag(self, event, element):
