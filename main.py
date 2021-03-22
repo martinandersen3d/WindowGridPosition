@@ -63,7 +63,7 @@ class App(Frame):
 
         for x in range(0, self.rows):
             for y in range(0, self.columns):
-                lbl = Label(self, bg='SlateGray3', width=10, height=5, 
+                lbl = Label(self, bg='#fff', width=10, height=5, 
                     cursor='hand2')
                 lblId= 'x' + str(x) + 'y' + str(y)
                 lbl.pos_attr= 'x' + str(x) + 'y' + str(y)
@@ -85,13 +85,16 @@ class App(Frame):
 
     def mouseout(self, enter, element):
         self.data.configure(text="")
-        self.itemsMap[element].configure(background='SlateGray3')
+        self.itemsMap[element].configure(background='#fff')
 
     def mousedown(self, enter, element):
         self.data.configure(text="down")
 
     def mouseup(self, enter, element):
         self.data.configure(text="up")
+        for i in self.itemsMap:
+            print(i)
+            self.itemsMap[i].configure(background='#fff')
 
     def mousedrag(self, event, element):
         txt="drag: x:" + str(event.x )+ ", y: " + str(event.y)
