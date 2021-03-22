@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 # sudo apt-get install python3-tk
-
+import sys, getopt
+import time
+# os bruges til at sende kommandoer til commandpromt
+import os
 from tkinter import Tk, Frame, Label, Entry, Button, PhotoImage
 from tkinter import BOTH, LEFT
 import math
@@ -16,13 +19,15 @@ class App(Frame):
         self.itemsMap={}
         self.isMouseDragging=False
         self.firstSelection=""
+        self.firstX=0
+        self.firstY=0
         self.lastSelection=""
         self.initUI()
 
 
     def initUI(self):
 
-        self.master.title("Cursors")
+        self.master.title("Window_Position")
         self.pack(fill=BOTH)
 
         for x in range(0, 100):
@@ -68,6 +73,8 @@ class App(Frame):
     def mousedown(self, enter, element):
         self.info.configure(text="down")
         self.firstSelection=element
+        self.firstX=self.itemsMap[element].row_attr
+        self.firstY=self.itemsMap[element].col_attr
         
 
     def mouseup(self, enter, element):
@@ -75,6 +82,23 @@ class App(Frame):
         for i in self.itemsMap:
             self.itemsMap[i].configure(background='#fff')
         self.isMouseDragging=False
+        
+        screenW=5120
+        screenY=1440
+        newPosX=math.floor(self.firstX*(screenW/self.rows))
+        newPosY=math.floor(self.firstY*(screenY/self.columns))
+        # self.firstX
+        
+        pid = os.popen("xdotool search --onlyvisible --name 'Window_Position'").read()
+        pid = str(pid).strip()
+        print(pid)
+        # time.sleep(1)
+        cmd_size="xdotool windowsize "+pid+" 800 600"
+        cmd_position=f"xdotool windowmove {pid} {newPosX} {newPosY}"
+        # print(size)
+        # print(position)
+        os.popen(cmd_size).read()
+        os.popen(cmd_position).read()
 
     def mousedrag(self, event, element):
         txt="drag: x:" + str(event.x )+ ", y: " + str(event.y)
