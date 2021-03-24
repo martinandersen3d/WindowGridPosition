@@ -76,11 +76,11 @@ class App(Frame):
         # print('newSizeY', newSizeY)
         # self.firstX
         
-        time.sleep(0.2)
+        time.sleep(0.1)
         self.tk.withdraw() 
         self.tk.update()
         
-        time.sleep(0.2)
+        time.sleep(0.1)
         
         
         
@@ -101,18 +101,16 @@ class App(Frame):
             print('Window is MAXIMIZED')
             os.popen("xdotool key 'Super_L+F11'").read()
 
-        # time.sleep(1)
-        # cmd_poshack=f"xdotool windowmove --sync  --relative  {pid}  10 20"
-        # os.popen(cmd_poshack).read()
+
         # time.sleep(0.2)
-        cmd_position=f"xdotool windowmove --sync {pid} {newPosX} {newPosY}"
+        cmd_position=f"xdotool windowmove {pid} {newPosX} {newPosY}"
         # time.sleep(0.2)
         
-        cmd_size=f"xdotool windowsize --sync {pid} {newSizeX} {newSizeY}"
+        cmd_size=f"xdotool windowsize {pid} {newSizeX} {newSizeY}"
         # print(size)
         # print(position)
         os.popen(cmd_size).read()
-        time.sleep(0.1)
+        # time.sleep(0.1)
         os.popen(cmd_position).read()
         
         # time.sleep(1)
