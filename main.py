@@ -83,13 +83,32 @@ class App(Frame):
         time.sleep(0.2)
         
         
+        
         # pid = os.popen("xdotool search --onlyvisible --name 'Window_Position'").read()
         pid = os.popen("xdotool getactivewindow").read()
         pid = str(pid).strip()
         print(pid)
+        
+        # Maximize window Vertical: Super_L+F11
+        # Maximize window Horizontal: Ctrl+Super_L+F11
+        vMaxState = os.popen(f"xprop -id {pid} | grep '_NET_WM_STATE(ATOM)'").read()
+        
+        if '_NET_WM_STATE_MAXIMIZED_HORZ' in vMaxState:
+            print('Window is MAXIMIZED')
+            os.popen("xdotool key 'Ctrl+Super_L+F11'").read()
+        
+        if '_NET_WM_STATE_MAXIMIZED_VERT' in vMaxState:
+            print('Window is MAXIMIZED')
+            os.popen("xdotool key 'Super_L+F11'").read()
+
         # time.sleep(1)
-        cmd_size=f"xdotool windowsize {pid} {newSizeX} {newSizeY}"
-        cmd_position=f"xdotool windowmove {pid} {newPosX} {newPosY}"
+        # cmd_poshack=f"xdotool windowmove --sync  --relative  {pid}  10 20"
+        # os.popen(cmd_poshack).read()
+        # time.sleep(0.2)
+        cmd_position=f"xdotool windowmove --sync {pid} {newPosX} {newPosY}"
+        # time.sleep(0.2)
+        
+        cmd_size=f"xdotool windowsize --sync {pid} {newSizeX} {newSizeY}"
         # print(size)
         # print(position)
         os.popen(cmd_size).read()
